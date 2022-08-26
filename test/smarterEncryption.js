@@ -1,9 +1,9 @@
-const assert = require('assert')
+import * as assert from 'assert'
 
-const {
+import {
     SMARTER_ENCRYPTION_PRIORITY,
     generateSmarterEncryptionRuleset
-} = require('../lib/smarterEncryption')
+} from '../lib/smarterEncryption.js'
 
 describe('generateSmarterEncryptionRuleset', () => {
     it('should return an empty list of rules if there are no domains', () => {

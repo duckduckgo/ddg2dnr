@@ -1,6 +1,6 @@
-const assert = require('assert')
+import * as assert from 'assert'
 
-const {
+import {
     BASELINE_PRIORITY,
     SUBDOMAIN_PRIORITY_INCREMENT,
     TRACKER_RULE_PRIORITY_INCREMENT,
@@ -8,7 +8,7 @@ const {
     MAXIMUM_TRACKER_RULE_PRIORITY_INCREMENT,
     MAXIMUM_REGEX_RULES,
     generateTrackerBlockingRuleset
-} = require('../lib/trackerBlocking')
+} from '../lib/trackerBlocking.js'
 
 const MAXIMUM_RULES_PER_DOMAIN = Math.floor(
     MAXIMUM_TRACKER_RULE_PRIORITY_INCREMENT /

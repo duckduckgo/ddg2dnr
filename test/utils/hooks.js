@@ -1,6 +1,6 @@
-const { PuppeteerInterface } = require('../../puppeteerInterface')
+import { PuppeteerInterface } from '../../puppeteerInterface.js'
 
-exports.mochaHooks = {
+export const mochaHooks = {
     async beforeAll () {
         this.timeout(20000)
         this.browser = new PuppeteerInterface()
