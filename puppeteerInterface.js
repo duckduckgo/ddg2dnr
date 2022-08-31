@@ -1,16 +1,16 @@
-/** @module puppeteerInterface */
-
 // @ts-nocheck - ruleById property on self Object inside background
 //               ServiceWorker context for the extension is cumbersome to type
 //               hint with JSDoc comments.
 
-const path = require('path')
-const puppeteer = require('puppeteer')
+import * as path from 'path'
+import * as puppeteer from 'puppeteer'
+import { fileURLToPath } from 'url'
 
-class PuppeteerInterface {
+export class PuppeteerInterface {
     async setupBrowser () {
         const testExtensionPath = path.join(
-            __dirname, 'test', 'data', 'chrome-extension'
+            path.dirname(fileURLToPath(import.meta.url)),
+            'test', 'data', 'chrome-extension'
         )
 
         // Open the browser, installing the test extension.
@@ -177,5 +177,3 @@ class PuppeteerInterface {
         )
     }
 }
-
-exports.PuppeteerInterface = PuppeteerInterface

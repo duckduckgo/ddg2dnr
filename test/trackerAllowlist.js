@@ -1,14 +1,14 @@
-const assert = require('assert')
+import * as assert from 'assert'
 
-const {
+import {
     BASELINE_PRIORITY,
     PRIORITY_INCREMENT,
     MAXIMUM_RULES_PER_TRACKER_ENTRY
-} = require('../lib/trackerAllowlist')
+} from '../lib/trackerAllowlist.js'
 
-const {
+import {
     generateExtensionConfigurationRuleset
-} = require('../lib/extensionConfiguration')
+} from '../lib/extensionConfiguration.js'
 
 async function isRegexSupportedTrue ({ regex, isCaseSensitive }) {
     return { isSupported: true }

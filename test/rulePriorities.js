@@ -1,18 +1,16 @@
-const assert = require('assert')
+import * as assert from 'assert'
 
-const {
-    SMARTER_ENCRYPTION_PRIORITY
-} = require('../lib/smarterEncryption')
+import { SMARTER_ENCRYPTION_PRIORITY } from '../lib/smarterEncryption.js'
 
-const {
-    BASELINE_PRIORITY: TRACKER_BLOCKING_BASELINE_PRIORITY,
-    CEILING_PRIORITY: TRACKER_BLOCKING_CEILING_PRIORITY
-} = require('../lib/trackerBlocking')
+import {
+    BASELINE_PRIORITY as TRACKER_BLOCKING_BASELINE_PRIORITY,
+    CEILING_PRIORITY as TRACKER_BLOCKING_CEILING_PRIORITY
+} from '../lib/trackerBlocking.js'
 
-const {
-    BASELINE_PRIORITY: TRACKER_ALLOWLIST_BASELINE_PRIORITY,
-    CEILING_PRIORITY: TRACKER_ALLOWLIST_CEILING_PRIORITY
-} = require('../lib/trackerAllowlist')
+import {
+    BASELINE_PRIORITY as TRACKER_ALLOWLIST_BASELINE_PRIORITY,
+    CEILING_PRIORITY as TRACKER_ALLOWLIST_CEILING_PRIORITY
+} from '../lib/trackerAllowlist.js'
 
 describe('Rule Priorities', () => {
     it('correct relative rule priorities', () => {

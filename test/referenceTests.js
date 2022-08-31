@@ -1,17 +1,15 @@
-const assert = require('assert')
-const fs = require('fs')
-const path = require('path')
+import * as assert from 'assert'
+import * as fs from 'fs'
+import * as path from 'path'
+import { fileURLToPath } from 'url'
 
-const {
-    generateSmarterEncryptionRuleset
-} = require('../lib/smarterEncryption')
-const {
-    generateTrackerBlockingRuleset
-} = require('../lib/trackerBlocking')
+import { generateSmarterEncryptionRuleset } from '../lib/smarterEncryption.js'
+import { generateTrackerBlockingRuleset } from '../lib/trackerBlocking.js'
 
 function referenceTestPath (...args) {
     return path.join(
-        __dirname, '..', 'node_modules', '@duckduckgo/privacy-reference-tests',
+        path.dirname(fileURLToPath(import.meta.url)), '..',
+        'node_modules', '@duckduckgo/privacy-reference-tests',
         ...args
     )
 }

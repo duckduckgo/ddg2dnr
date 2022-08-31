@@ -1,12 +1,13 @@
-const fs = require('fs')
-const process = require('process')
+import * as fs from 'fs'
+import * as process from 'process'
 
-const { PuppeteerInterface } = require('./puppeteerInterface')
+import { PuppeteerInterface } from './puppeteerInterface.js'
 
-const { generateSmarterEncryptionRuleset } = require('./lib/smarterEncryption')
-const { generateTrackerBlockingRuleset } = require('./lib/trackerBlocking')
-const { generateExtensionConfigurationRuleset } =
-      require('./lib/extensionConfiguration')
+import { generateSmarterEncryptionRuleset } from './lib/smarterEncryption.js'
+import { generateTrackerBlockingRuleset } from './lib/trackerBlocking.js'
+import {
+    generateExtensionConfigurationRuleset
+} from './lib/extensionConfiguration.js'
 
 const [command, ...args] = process.argv.slice(2)
 

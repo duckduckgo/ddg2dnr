@@ -1,8 +1,8 @@
-const assert = require('assert')
+import * as assert from 'assert'
 
-const {
+import {
     generateExtensionConfigurationRuleset
-} = require('../lib/extensionConfiguration')
+} from '../lib/extensionConfiguration.js'
 
 describe('generateExtensionConfigurationRuleset', () => {
     it('should reject invalid extension configuration', async () => {
