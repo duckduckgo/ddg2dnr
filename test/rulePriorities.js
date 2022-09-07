@@ -14,8 +14,14 @@ const {
     CEILING_PRIORITY: TRACKER_ALLOWLIST_CEILING_PRIORITY
 } = require('../lib/trackerAllowlist')
 
+const {
+    PRIORITY: SURROGATES_PRIORITY
+} = require('../lib/surrogates')
+
 describe('Rule Priorities', () => {
     it('correct relative rule priorities', () => {
+        // Blocking/allowing rules.
+
         // Tracker Blocking priorities.
         assert.ok(TRACKER_BLOCKING_BASELINE_PRIORITY > 0)
         assert.ok(TRACKER_BLOCKING_CEILING_PRIORITY >
@@ -25,14 +31,22 @@ describe('Rule Priorities', () => {
         assert.ok(TRACKER_ALLOWLIST_BASELINE_PRIORITY >
                   TRACKER_BLOCKING_CEILING_PRIORITY)
 
+        // Redirection rules.
+        // Notes:
+        //   - It's important that the redirection rules have a higher priority
+        //     than Tracker Blocking etc rules. After a request is redirect, the
+        //     request will still match against other block/allow rules. But
+        //     after an allow rules matches a request, the redirection rules
+        //     will no longer have the opportunity to match.
+        //   - Relative priority between redirection rules does not matter for
+        //     the same reason.
+
         // Smarter Encryption priority.
-        // Note: It's important that the Smarter Encryption rule priority is
-        //       higher than the priority for Tracker Blocking etc rules.
-        //       After a request is redirected to use HTTPS, the redirected
-        //       request will still match against other block/allow rules. But
-        //       after an allow rules matches a request, upgrade schema rules
-        //       will no longer have the opportunity to match.
         assert.ok(SMARTER_ENCRYPTION_PRIORITY >
+                  TRACKER_ALLOWLIST_CEILING_PRIORITY)
+
+        // Surrogate Scripts redirection priority.
+        assert.ok(SURROGATES_PRIORITY >
                   TRACKER_ALLOWLIST_CEILING_PRIORITY)
     })
 })

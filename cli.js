@@ -4,7 +4,7 @@ const process = require('process')
 const { PuppeteerInterface } = require('./puppeteerInterface')
 
 const { generateSmarterEncryptionRuleset } = require('./lib/smarterEncryption')
-const { generateTrackerBlockingRuleset } = require('./lib/trackerBlocking')
+const { generateTdsRuleset } = require('./lib/tds')
 const { generateExtensionConfigurationRuleset } =
       require('./lib/extensionConfiguration')
 
@@ -35,24 +35,36 @@ async function main () {
             )
         }
         break
-    case 'tracker-blocking':
-        if (args.length < 2 || args.length > 3) {
+    case 'tds':
+        if (args.length < 3 || args.length > 4) {
             console.error(
-                'Usage: npm run tracker-blocking',
-                './tds-input.json ./ruleset-output.json',
-                '[./domain-by-rule-id-output.txt]'
+                'Usage: npm run tds',
+                './tds-input.json ./surrogate-input.json ',
+                './surrogates-ruleset-output.json ',
+                '[./match-details-by-rule-id-output.json]'
             )
         } else {
-            const [tdsFilePath, rulesetFilePath, mappingFilePath] = args
+            const [
+                tdsFilePath,
+                surrogatesFilePath,
+                rulesetFilePath,
+                mappingFilePath
+            ] = args
 
             const browser = new PuppeteerInterface()
             const isRegexSupported = browser.isRegexSupported.bind(browser)
 
-            const { ruleset, trackerDomainByRuleId } =
-                  await generateTrackerBlockingRuleset(
+            const { ruleset, matchDetailsByRuleId } =
+                  await generateTdsRuleset(
                       JSON.parse(
                           fs.readFileSync(tdsFilePath, { encoding: 'utf8' })
                       ),
+                      JSON.parse(
+                          fs.readFileSync(
+                              surrogatesFilePath, { encoding: 'utf8' }
+                          )
+                      ),
+                      '/web_accessible_resources/',
                       isRegexSupported
                   )
 
@@ -66,7 +78,7 @@ async function main () {
             if (mappingFilePath) {
                 fs.writeFileSync(
                     mappingFilePath,
-                    trackerDomainByRuleId.join('\n')
+                    JSON.stringify(matchDetailsByRuleId, null, '\t')
                 )
             }
         }
@@ -76,7 +88,7 @@ async function main () {
             console.error(
                 'Usage: npm run extension-configuration',
                 './extension-config-input.json ./ruleset-output.json ',
-                '[./domain-and-reason-by-rule-id-output.json]'
+                '[./match-details-by-rule-id-output.json]'
             )
         } else {
             const [

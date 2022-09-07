@@ -6,14 +6,20 @@ const {
     TRACKER_RULE_PRIORITY_INCREMENT,
     MAXIMUM_SUBDOMAIN_PRIORITY,
     MAXIMUM_TRACKER_RULE_PRIORITY_INCREMENT,
-    MAXIMUM_REGEX_RULES,
-    generateTrackerBlockingRuleset
+    MAXIMUM_REGEX_RULES
 } = require('../lib/trackerBlocking')
+
+const {
+    generateTdsRuleset
+} = require('../lib/tds')
 
 const MAXIMUM_RULES_PER_DOMAIN = Math.floor(
     MAXIMUM_TRACKER_RULE_PRIORITY_INCREMENT /
         TRACKER_RULE_PRIORITY_INCREMENT
 )
+
+/** @type Record<string, Array<string, string>[]> */
+const surrogatesConfig = {}
 
 function emptyBlockList () {
     return {
@@ -79,7 +85,7 @@ function stringifyBlocklist (tds) {
  * @typedef {object} rulesetEqualOptions
  * @property {object[]} [expectedRuleset]
  *   The expected declarativeNetRequest ruleset.
- * @property {object[]} [expectedLookup]
+ * @property {object} [expectedLookup]
  *   The expected ruleId -> matchDetails lookup.
  * @property {function} [rulesetTransform]
  *   Function to apply to the generated ruleset before comparing it to the
@@ -103,8 +109,8 @@ function stringifyBlocklist (tds) {
  *   See https://developer.chrome.com/docs/extensions/reference/declarativeNetRequest/#method-isRegexSupported
  * @param {number|null} startingRuleId
  *   Rule ID for the generated declarativeNetRequest rules to start from. Rule
- *   IDs are incremented sequentially from the starting point. If null is provided,
- *   the startingRuleId argument is not passed through.
+ *   IDs are incremented sequentially from the starting point. If null is
+ *   provided, the startingRuleId argument is not passed through.
  * @param {rulesetEqualOptions} options
  * @return {Promise<>}
  */
@@ -116,12 +122,12 @@ async function rulesetEqual (tds, isRegexSupported, startingRuleId, {
 
     let result
     if (typeof startingRuleId === 'number') {
-        result = await generateTrackerBlockingRuleset(
-            tds, isRegexSupported, startingRuleId
+        result = await generateTdsRuleset(
+            tds, surrogatesConfig, '', isRegexSupported, startingRuleId
         )
     } else {
-        result = await generateTrackerBlockingRuleset(
-            tds, isRegexSupported
+        result = await generateTdsRuleset(
+            tds, surrogatesConfig, '', isRegexSupported
         )
     }
 
@@ -139,14 +145,7 @@ async function rulesetEqual (tds, isRegexSupported, startingRuleId, {
         assert.deepEqual(actualRuleset, expectedRuleset)
     }
     if (expectedLookup) {
-        let actualLookup = result.trackerDomainByRuleId
-
-        // Replace empty keys with null, to make tests easier to write.
-        startingRuleId = startingRuleId || 1
-        for (let i = 0; i < startingRuleId; i++) {
-            assert.equal(actualLookup[i], undefined)
-            actualLookup[i] = null
-        }
+        let actualLookup = result.matchDetailsByRuleId
 
         if (lookupTransform) {
             actualLookup = lookupTransform(actualLookup, result.ruleset)
@@ -156,40 +155,6 @@ async function rulesetEqual (tds, isRegexSupported, startingRuleId, {
 }
 
 describe('generateTrackerBlockingRuleset', () => {
-    it('should reject invalid tds.json file', async () => {
-        const invalidBlockLists = [
-            undefined,
-            1,
-            {},
-            { domains: {}, entities: {}, trackers: {} },
-            { cnames: {}, entities: {}, trackers: {} },
-            { cnames: {}, domains: {}, trackers: {} },
-            { cnames: {}, domains: {}, entities: {} },
-            { cnames: 1, domains: 2, entities: 3, trackers: 4 }
-        ]
-
-        for (const blockList of invalidBlockLists) {
-            await assert.rejects(() =>
-                generateTrackerBlockingRuleset(blockList, () => { })
-            )
-        }
-    })
-
-    it('should notice missing isRegexSupported argument', async () => {
-        await assert.rejects(() =>
-            // @ts-expect-error - Missing isRegexSupported argument.
-            generateTrackerBlockingRuleset(
-                { cnames: {}, domains: {}, entities: {}, trackers: {} }
-            )
-        )
-        await assert.rejects(() =>
-            generateTrackerBlockingRuleset(
-                // @ts-expect-error - Invalid isRegexSupported argument.
-                { cnames: {}, domains: {}, entities: {}, trackers: {} }, 3
-            )
-        )
-    })
-
     it('should reject a tds.json file that contains too many tracker entries ' +
        'for subdomains of the same domain', async () => {
         const blockList = emptyBlockList()
@@ -203,8 +168,8 @@ describe('generateTrackerBlockingRuleset', () => {
             addDomain(blockList, domain, entity, 'block')
         }
 
-        const { ruleset } = await generateTrackerBlockingRuleset(
-            blockList, isRegexSupportedTrue
+        const { ruleset } = await generateTdsRuleset(
+            blockList, surrogatesConfig, '', isRegexSupportedTrue
         )
         for (const rule of ruleset) {
             assert.ok(typeof rule.priority === 'number' &&
@@ -214,7 +179,9 @@ describe('generateTrackerBlockingRuleset', () => {
         addDomain(blockList, 'a.' + domain, entity, 'block')
 
         await assert.rejects(() =>
-            generateTrackerBlockingRuleset(blockList, isRegexSupportedTrue)
+            generateTdsRuleset(
+                blockList, surrogatesConfig, '', isRegexSupportedTrue
+            )
         )
     })
 
@@ -230,13 +197,17 @@ describe('generateTrackerBlockingRuleset', () => {
         addDomain(blockList, domain, entity, 'allow', rules)
 
         await assert.doesNotReject(() =>
-            generateTrackerBlockingRuleset(blockList, isRegexSupportedTrue)
+            generateTdsRuleset(
+                blockList, surrogatesConfig, '', isRegexSupportedTrue
+            )
         )
 
         blockList.trackers[domain].rules.push({ rule: 'example\\.com/extra' })
 
         await assert.rejects(() =>
-            generateTrackerBlockingRuleset(blockList, isRegexSupportedTrue)
+            generateTdsRuleset(
+                blockList, surrogatesConfig, '', isRegexSupportedTrue
+            )
         )
     })
 
@@ -244,7 +215,8 @@ describe('generateTrackerBlockingRuleset', () => {
        'expression rule filters', async () => {
         const blockList = emptyBlockList()
 
-        const maxRegexDomains = Math.floor(MAXIMUM_REGEX_RULES / MAXIMUM_RULES_PER_DOMAIN)
+        const maxRegexDomains =
+              Math.floor(MAXIMUM_REGEX_RULES / MAXIMUM_RULES_PER_DOMAIN)
 
         const rules = new Array(MAXIMUM_RULES_PER_DOMAIN)
         rules.fill({ rule: '[0-9]+' })
@@ -257,13 +229,17 @@ describe('generateTrackerBlockingRuleset', () => {
         }
 
         await assert.doesNotReject(() =>
-            generateTrackerBlockingRuleset(blockList, isRegexSupportedTrue)
+            generateTdsRuleset(
+                blockList, surrogatesConfig, '', isRegexSupportedTrue
+            )
         )
 
         addDomain(blockList, 'example-extra.invalid', entity, 'allow', rules)
 
         await assert.rejects(() =>
-            generateTrackerBlockingRuleset(blockList, isRegexSupportedTrue)
+            generateTdsRuleset(
+                blockList, surrogatesConfig, '', isRegexSupportedTrue
+            )
         )
     })
 
@@ -387,7 +363,16 @@ describe('generateTrackerBlockingRuleset', () => {
                     }
                 }
             ],
-            expectedLookup: [null, 'block.invalid', 'allow.block.invalid']
+            expectedLookup: {
+                1: {
+                    type: 'trackerBlocking',
+                    possibleTrackerDomains: ['block.invalid']
+                },
+                2: {
+                    type: 'trackerBlocking',
+                    possibleTrackerDomains: ['allow.block.invalid']
+                }
+            }
         })
     })
 
@@ -1034,7 +1019,7 @@ describe('generateTrackerBlockingRuleset', () => {
             lookupTransform (lookup, ruleset) {
                 const domains = []
                 for (const rule of ruleset) {
-                    domains.push(lookup[rule.id])
+                    domains.push(...lookup[rule.id].possibleTrackerDomains)
                 }
                 return domains
             },
@@ -1060,18 +1045,20 @@ describe('generateTrackerBlockingRuleset', () => {
         addDomain(blockList, 'block.block.invalid', 'Block entity', 'block')
 
         await rulesetEqual(blockList, isRegexSupportedTrue, 3333, {
-            lookupTransform (lookup, ruleset) {
-                const domains = []
-                for (const rule of ruleset) {
-                    domains.push(lookup[rule.id])
+            expectedLookup: {
+                3333: {
+                    type: 'trackerBlocking',
+                    possibleTrackerDomains: ['block.invalid']
+                },
+                3334: {
+                    type: 'trackerBlocking',
+                    possibleTrackerDomains: ['allow.block.invalid']
+                },
+                3335: {
+                    type: 'trackerBlocking',
+                    possibleTrackerDomains: ['block.block.invalid']
                 }
-                return domains
-            },
-            expectedLookup: [
-                'block.invalid',
-                'allow.block.invalid',
-                'block.block.invalid'
-            ]
+            }
         })
     })
 
@@ -1163,11 +1150,17 @@ describe('generateTrackerBlockingRuleset', () => {
                 }
 
             ],
-            expectedLookup: [
-                null,
-                'a.invalid,b.invalid,c.invalid',
-                'a.invalid'
-            ]
+            expectedLookup: {
+                1: {
+                    type: 'trackerBlocking',
+                    possibleTrackerDomains:
+                        ['a.invalid', 'b.invalid', 'c.invalid']
+                },
+                2: {
+                    type: 'trackerBlocking',
+                    possibleTrackerDomains: ['a.invalid']
+                }
+            }
         })
     })
 
@@ -1252,6 +1245,7 @@ describe('generateTrackerBlockingRuleset', () => {
                 ]
             },
             expectedRuleset: [
+                ['||example.invalid/path', ''],
                 ['||example.invalid.foo/path', ''],
                 ['/path', ''],
                 ['subdomain.example.invalid/path', '']

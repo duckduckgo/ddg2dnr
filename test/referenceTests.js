@@ -59,8 +59,11 @@ describe('Reference Tests', () => {
             testDescription, requestURL: initialUrl, requestType,
             siteURL: initiatorUrl, expectAction: expectedAction
         } of testCases(referenceTests)) {
-            // Note: Stop skipping these test cases once support for
-            //       Surrogates has been added.
+            // Note: Stop skipping these test cases once
+            //       privacy-reference-tests[1] provides the modern
+            //       mapping.json[2] surrogates file.
+            // 1 - https://github.com/duckduckgo/privacy-reference-tests/tree/main/tracker-radar-tests/TR-domain-matching
+            // 2 - https://github.com/duckduckgo/tracker-surrogates/blob/main/mapping.json
             if (testDescription.startsWith('surrogate-tests:')) {
                 continue
             }

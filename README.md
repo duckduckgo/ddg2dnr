@@ -21,20 +21,25 @@ npm install
 Generate a Smarter Encryption ruleset:
 
 ```bash
-npm run smarter-encryption ../list-of-domains.txt ../smarter-encryption-ruleset.json
+npm run smarter-encryption ../list-of-domains-input.txt ../smarter-encryption-ruleset-output.json
 ```
 
-Generate a Tracker Blocking ruleset:
+Generate the TDS ruleset:
 
 ```bash
-npm run tracker-blocking ../tds.json ../tracker-blocking-ruleset.json [../tracker-domain-by-rule-id.txt]
+npm run tds ../tds-input.json ../mapping-input.json ../tds-ruleset-output.json \
+        [../match-details-by-rule-id-output.json]
 ```
+
+Note:
+ - This includes both Tracker blocking (see [tds.json][3]) and
+   "surrogate script" redirection (see [mapping.json][4]).
 
 Generate the extension configuration ruleset:
 
 ```bash
-npm run extension-configuration ../extension-config.json ../extension-configuration-ruleset.json \
-        [../match-details-by-rule-id.json]
+npm run extension-configuration ../extension-config-input.json ../extension-configuration-ruleset-output.json \
+        [../match-details-by-rule-id-output.json]
 ```
 
 Note:
@@ -57,3 +62,5 @@ npm test
 
 [1]: https://developer.chrome.com/docs/extensions/reference/declarativeNetRequest/
 [2]: https://github.com/duckduckgo/duckduckgo-privacy-extension/
+[3]: https://staticcdn.duckduckgo.com/trackerblocking/v3/tds.json
+[4]: https://github.com/duckduckgo/tracker-surrogates/blob/main/mapping.json
