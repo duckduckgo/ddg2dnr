@@ -21,6 +21,7 @@
         "eslint": "eslint . --ext .js",
         "tsc": "tsc",
         "lint": "npm run eslint && npm run tsc",
+        "eslint-fix": "npm run eslint -- --fix",
         "smarter-encryption": "node cli.js smarter-encryption",
         "test": "mocha",
         "tds": "node cli.js tds"

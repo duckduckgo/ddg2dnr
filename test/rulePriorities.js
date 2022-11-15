@@ -5,6 +5,10 @@ const {
 } = require('../lib/smarterEncryption')
 
 const {
+    GPC_HEADER_PRIORITY
+} = require('../lib/gpc')
+
+const {
     BASELINE_PRIORITY: TRACKER_BLOCKING_BASELINE_PRIORITY,
     CEILING_PRIORITY: TRACKER_BLOCKING_CEILING_PRIORITY
 } = require('../lib/tds')
@@ -64,5 +68,9 @@ describe('Rule Priorities', () => {
                   SMARTER_ENCRYPTION_PRIORITY)
         assert.ok(USER_ALLOWLISTED_PRIORITY ===
                   UNPROTECTED_TEMPORARY_ALLOWLIST_PRIORITY)
+
+        // GPC header should have lower priority than user allowlisting
+        // so that allowlisting overrides the GPC rule
+        assert.ok(GPC_HEADER_PRIORITY < USER_ALLOWLISTED_PRIORITY)
     })
 })

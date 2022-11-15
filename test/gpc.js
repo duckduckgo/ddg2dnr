@@ -1,11 +1,12 @@
 const assert = require('assert')
 
 const {
-    GPC_HEADER_PRIORITY
+    USER_ALLOWLIST_PRIORITY
 } = require('../lib/rulePriorities')
 
 const {
-    generateGPCheaderRules
+    generateGPCheaderRules,
+    GPC_HEADER_PRIORITY
 } = require('../lib/gpc')
 
 const baseExtensionConfig = {
@@ -14,10 +15,10 @@ const baseExtensionConfig = {
             state: 'enabled',
             exceptions: [{
                 domain: 'exception1.example',
-                reason: '1st GPC header  reason'
+                reason: '1st GPC header reason'
             }, {
-                domain: 'content-blocking2.example',
-                reason: '2nd GPC header  reason'
+                domain: 'exception2.example',
+                reason: '2nd GPC header reason'
             }]
         }
     }
@@ -36,12 +37,12 @@ const expectedGPCResult = [{
         condition: {
             resourceTypes: ['main_frame', 'sub_frame', 'stylesheet', 'script', 'image', 'font', 'object', 'xmlhttprequest', 'ping', 'csp_report', 'media', 'websocket', 'webtransport', 'webbundle', 'other'],
             excludedInitiatorDomains: [
-                'content-blocking1.example',
-                'content-blocking2.example'
+                'exception1.example',
+                'exception2.example'
             ],
             excludedRequestDomains: [
-                'content-blocking1.example',
-                'content-blocking2.example'
+                'exception1.example',
+                'exception2.example'
             ]
         }
     }
@@ -50,7 +51,7 @@ const expectedGPCResult = [{
 describe('GPC Header rule', () => {
     it('should generate GPC header rule  correctly', async () => {
         const gpcRule = generateGPCheaderRules(baseExtensionConfig)
-        assert.deepEqual(gpcRule, expectedGPCRule)
+        assert.deepEqual(gpcRule, expectedGPCResult)
     })
 
     it('shouldn\'t generate contentBlocking rules if disabled', async () => {
