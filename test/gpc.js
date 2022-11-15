@@ -1,10 +1,6 @@
 const assert = require('assert')
 
 const {
-    USER_ALLOWLIST_PRIORITY
-} = require('../lib/rulePriorities')
-
-const {
     generateGPCheaderRules,
     GPC_HEADER_PRIORITY
 } = require('../lib/gpc')
