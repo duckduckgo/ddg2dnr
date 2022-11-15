@@ -23,7 +23,7 @@ const baseExtensionConfig = {
     }
 }
 
-const expectedGPCRule = [{
+const expectedGPCResult = [{
     matchDetails: { type: 'gpc' },
     rule: {
         priority: GPC_HEADER_PRIORITY,
