@@ -13,7 +13,7 @@ const baseExtensionConfig = {
         gpc: {
             state: 'enabled',
             exceptions: [{
-                domain: 'content-blocking1.example',
+                domain: 'exception1.example',
                 reason: '1st GPC header  reason'
             }, {
                 domain: 'content-blocking2.example',
