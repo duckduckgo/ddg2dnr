@@ -30,6 +30,9 @@ const {
 
 describe('Rule Priorities', () => {
     it('correct relative rule priorities', () => {
+        assert.ok(GPC_HEADER_PRIORITY >
+                  TRACKER_BLOCKING_CEILING_PRIORITY)
+
         // Tracker Blocking priorities.
         assert.ok(TRACKER_BLOCKING_BASELINE_PRIORITY > 0)
         assert.ok(TRACKER_BLOCKING_CEILING_PRIORITY >
@@ -68,10 +71,7 @@ describe('Rule Priorities', () => {
                   SMARTER_ENCRYPTION_PRIORITY)
         assert.ok(USER_ALLOWLISTED_PRIORITY ===
                   UNPROTECTED_TEMPORARY_ALLOWLIST_PRIORITY)
-
-        // GPC header should have lower priority than user allowlisting
-        // so that allowlisting overrides the GPC rule
-        assert.ok(GPC_HEADER_PRIORITY < USER_ALLOWLISTED_PRIORITY)
-        assert.ok(GPC_HEADER_PRIORITY > TRACKER_BLOCKING_CEILING_PRIORITY)
+        assert.ok(USER_ALLOWLISTED_PRIORITY >
+                  GPC_HEADER_PRIORITY)
     })
 })
