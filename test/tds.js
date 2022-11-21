@@ -122,12 +122,10 @@ async function rulesetEqual (tds, isRegexSupported, startingRuleId, {
             tds, supportedSurrogateScripts, '/', isRegexSupported,
             startingRuleId
         )
-        console.log('TDS result', JSON.stringify(result.ruleset))
     } else {
         result = await generateTdsRuleset(
             tds, supportedSurrogateScripts, '/', isRegexSupported
         )
-        console.log('TDS result2', JSON.stringify(result.ruleset))
     }
 
     assert.deepEqual(stringifyBlocklist(tds), tdsBefore, 'TDS mutated!')
@@ -1555,8 +1553,6 @@ describe('generateTdsRuleset', () => {
     })
 
     it('should include rules with known custom actions', async () => {
-        const randAction = () => Math.random().toString()
-
         const blockList = emptyBlockList()
         addDomain(blockList, 'default-ignore.invalid', 'Default Ignore entity', 'ignore', [
             {
@@ -1617,208 +1613,208 @@ describe('generateTdsRuleset', () => {
             expectedRuleset: [{
                 priority: 10001,
                 action: {
-                    type: "block"
+                    type: 'block'
                 },
                 condition: {
-                    urlFilter: "||default-ignore.invalid/block-ctl-yt-2",
+                    urlFilter: '||default-ignore.invalid/block-ctl-yt-2',
                     isUrlFilterCaseSensitive: false,
-                    domainType: "thirdParty"
+                    domainType: 'thirdParty'
                 },
                 id: 1
             }, {
                 priority: 10001,
                 action: {
-                    type: "allow"
+                    type: 'allow'
                 },
                 condition: {
-                    urlFilter: "||default-ignore.invalid/block-ctl-yt-2",
+                    urlFilter: '||default-ignore.invalid/block-ctl-yt-2',
                     isUrlFilterCaseSensitive: false,
-                    resourceTypes: ["script"]
+                    resourceTypes: ['script']
                 },
                 id: 2
             }, {
                 priority: 10002,
                 action: {
-                    type: "block"
+                    type: 'block'
                 },
                 condition: {
-                    urlFilter: "||default-ignore.invalid/known-action-3",
+                    urlFilter: '||default-ignore.invalid/known-action-3',
                     isUrlFilterCaseSensitive: false,
-                    domainType: "thirdParty"
+                    domainType: 'thirdParty'
                 },
                 id: 3
             }, {
                 priority: 10002,
                 action: {
-                    type: "allow"
+                    type: 'allow'
                 },
                 condition: {
-                    urlFilter: "||default-ignore.invalid/known-action-3",
+                    urlFilter: '||default-ignore.invalid/known-action-3',
                     isUrlFilterCaseSensitive: false,
-                    resourceTypes: ["script"]
+                    resourceTypes: ['script']
                 },
                 id: 4
             }, {
                 priority: 10003,
                 action: {
-                    type: "block"
+                    type: 'block'
                 },
                 condition: {
-                    urlFilter: "||default-ignore.invalid/block-ctl-fb-1",
+                    urlFilter: '||default-ignore.invalid/block-ctl-fb-1',
                     isUrlFilterCaseSensitive: false,
-                    domainType: "thirdParty"
+                    domainType: 'thirdParty'
                 },
                 id: 5
             }, {
                 priority: 10004,
                 action: {
-                    type: "block"
+                    type: 'block'
                 },
                 condition: {
-                    urlFilter: "||default-ignore.invalid/known-action-1",
+                    urlFilter: '||default-ignore.invalid/known-action-1',
                     isUrlFilterCaseSensitive: false,
-                    domainType: "thirdParty"
+                    domainType: 'thirdParty'
                 },
                 id: 6
             }, {
                 priority: 10000,
                 action: {
-                    type: "block"
+                    type: 'block'
                 },
                 condition: {
-                    domainType: "thirdParty",
-                    requestDomains: ["default-block.invalid"]
+                    domainType: 'thirdParty',
+                    requestDomains: ['default-block.invalid']
                 },
                 id: 7
             }, {
                 priority: 10001,
                 action: {
-                    type: "allow"
+                    type: 'allow'
                 },
                 condition: {
-                    urlFilter: "||default-block.invalid/block-ctl-yt-2",
+                    urlFilter: '||default-block.invalid/block-ctl-yt-2',
                     isUrlFilterCaseSensitive: false,
-                    resourceTypes: ["script"]
+                    resourceTypes: ['script']
                 },
                 id: 8
             }, {
                 priority: 10002,
                 action: {
-                    type: "block"
+                    type: 'block'
                 },
                 condition: {
-                    urlFilter: "||default-block.invalid/known-action-2",
+                    urlFilter: '||default-block.invalid/known-action-2',
                     isUrlFilterCaseSensitive: false,
-                    domainType: "thirdParty"
+                    domainType: 'thirdParty'
                 },
                 id: 9
             }, {
                 priority: 10002,
                 action: {
-                    type: "allow"
+                    type: 'allow'
                 },
                 condition: {
-                    urlFilter: "||default-block.invalid/known-action-2",
+                    urlFilter: '||default-block.invalid/known-action-2',
                     isUrlFilterCaseSensitive: false,
-                    resourceTypes: ["script"]
+                    resourceTypes: ['script']
                 },
                 id: 10
             }, {
                 priority: 10003,
                 action: {
-                    type: "block"
+                    type: 'block'
                 },
                 condition: {
-                    urlFilter: "||default-block.invalid/block-ctl-fb-1",
+                    urlFilter: '||default-block.invalid/block-ctl-fb-1',
                     isUrlFilterCaseSensitive: false,
-                    domainType: "thirdParty"
+                    domainType: 'thirdParty'
                 },
                 id: 11
             }, {
                 priority: 10004,
                 action: {
-                    type: "block"
+                    type: 'block'
                 },
                 condition: {
-                    urlFilter: "||default-block.invalid/known-action-1",
+                    urlFilter: '||default-block.invalid/known-action-1',
                     isUrlFilterCaseSensitive: false,
-                    domainType: "thirdParty"
+                    domainType: 'thirdParty'
                 },
                 id: 12
             }, {
                 priority: 10000,
                 action: {
-                    type: "block-ctl-fb"
+                    type: 'block-ctl-fb'
                 },
                 condition: {
-                    domainType: "thirdParty",
-                    requestDomains: ["default-custom.invalid"]
+                    domainType: 'thirdParty',
+                    requestDomains: ['default-custom.invalid']
                 },
                 id: 13
             }, {
                 priority: 10001,
                 action: {
-                    type: "block"
+                    type: 'block'
                 },
                 condition: {
-                    urlFilter: "||default-custom.invalid/block-ctl-yt-2",
+                    urlFilter: '||default-custom.invalid/block-ctl-yt-2',
                     isUrlFilterCaseSensitive: false,
-                    domainType: "thirdParty"
+                    domainType: 'thirdParty'
                 },
                 id: 14
             }, {
                 priority: 10001,
                 action: {
-                    type: "allow"
+                    type: 'allow'
                 },
                 condition: {
-                    urlFilter: "||default-custom.invalid/block-ctl-yt-2",
+                    urlFilter: '||default-custom.invalid/block-ctl-yt-2',
                     isUrlFilterCaseSensitive: false,
-                    resourceTypes: ["script"]
+                    resourceTypes: ['script']
                 },
                 id: 15
             }, {
                 priority: 10002,
                 action: {
-                    type: "block"
+                    type: 'block'
                 },
                 condition: {
-                    urlFilter: "||default-custom.invalid/custom-default-action-2",
+                    urlFilter: '||default-custom.invalid/custom-default-action-2',
                     isUrlFilterCaseSensitive: false,
-                    domainType: "thirdParty"
+                    domainType: 'thirdParty'
                 },
                 id: 16
             }, {
                 priority: 10002,
                 action: {
-                    type: "allow"
+                    type: 'allow'
                 },
                 condition: {
-                    urlFilter: "||default-custom.invalid/custom-default-action-2",
+                    urlFilter: '||default-custom.invalid/custom-default-action-2',
                     isUrlFilterCaseSensitive: false,
-                    resourceTypes: ["script"]
+                    resourceTypes: ['script']
                 },
                 id: 17
             }, {
                 priority: 10003,
                 action: {
-                    type: "block"
+                    type: 'block'
                 },
                 condition: {
-                    urlFilter: "||default-custom.invalid/block-ctl-fb-1",
+                    urlFilter: '||default-custom.invalid/block-ctl-fb-1',
                     isUrlFilterCaseSensitive: false,
-                    domainType: "thirdParty"
+                    domainType: 'thirdParty'
                 },
                 id: 18
             }, {
                 priority: 10004,
                 action: {
-                    type: "block"
+                    type: 'block'
                 },
                 condition: {
-                    urlFilter: "||default-custom.invalid/custom-default-action-1",
+                    urlFilter: '||default-custom.invalid/custom-default-action-1',
                     isUrlFilterCaseSensitive: false,
-                    domainType: "thirdParty"
+                    domainType: 'thirdParty'
                 },
                 id: 19
             }]
