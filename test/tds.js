@@ -1578,7 +1578,8 @@ describe('generateTdsRuleset', () => {
             },
             {
                 rule: 'default-block\\.invalid\\/block-ctl-fb-1',
-                action: 'block-ctl-fb'
+                action: 'block-ctl-fb',
+                surrogate: 'fb-sdk.js'
             },
             {
                 rule: 'default-block\\.invalid\\/known-action-2',
@@ -1586,24 +1587,6 @@ describe('generateTdsRuleset', () => {
             },
             {
                 rule: 'default-block\\.invalid\\/block-ctl-yt-2',
-                action: 'block-ctl-yt',
-                exceptions: { types: ['script'] }
-            }
-        ])
-        addDomain(blockList, 'default-custom.invalid', 'Default custom action entity', 'block-ctl-fb', [
-            {
-                rule: 'default-custom\\.invalid\\/custom-default-action-1'
-            },
-            {
-                rule: 'default-custom\\.invalid\\/block-ctl-fb-1',
-                action: 'block-ctl-fb'
-            },
-            {
-                rule: 'default-custom\\.invalid\\/custom-default-action-2',
-                exceptions: { types: ['script'] }
-            },
-            {
-                rule: 'default-custom\\.invalid\\/block-ctl-yt-2',
                 action: 'block-ctl-yt',
                 exceptions: { types: ['script'] }
             }
@@ -1741,82 +1724,6 @@ describe('generateTdsRuleset', () => {
                     domainType: 'thirdParty'
                 },
                 id: 12
-            }, {
-                priority: 10000,
-                action: {
-                    type: 'block-ctl-fb'
-                },
-                condition: {
-                    domainType: 'thirdParty',
-                    requestDomains: ['default-custom.invalid']
-                },
-                id: 13
-            }, {
-                priority: 10001,
-                action: {
-                    type: 'block'
-                },
-                condition: {
-                    urlFilter: '||default-custom.invalid/block-ctl-yt-2',
-                    isUrlFilterCaseSensitive: false,
-                    domainType: 'thirdParty'
-                },
-                id: 14
-            }, {
-                priority: 10001,
-                action: {
-                    type: 'allow'
-                },
-                condition: {
-                    urlFilter: '||default-custom.invalid/block-ctl-yt-2',
-                    isUrlFilterCaseSensitive: false,
-                    resourceTypes: ['script']
-                },
-                id: 15
-            }, {
-                priority: 10002,
-                action: {
-                    type: 'block'
-                },
-                condition: {
-                    urlFilter: '||default-custom.invalid/custom-default-action-2',
-                    isUrlFilterCaseSensitive: false,
-                    domainType: 'thirdParty'
-                },
-                id: 16
-            }, {
-                priority: 10002,
-                action: {
-                    type: 'allow'
-                },
-                condition: {
-                    urlFilter: '||default-custom.invalid/custom-default-action-2',
-                    isUrlFilterCaseSensitive: false,
-                    resourceTypes: ['script']
-                },
-                id: 17
-            }, {
-                priority: 10003,
-                action: {
-                    type: 'block'
-                },
-                condition: {
-                    urlFilter: '||default-custom.invalid/block-ctl-fb-1',
-                    isUrlFilterCaseSensitive: false,
-                    domainType: 'thirdParty'
-                },
-                id: 18
-            }, {
-                priority: 10004,
-                action: {
-                    type: 'block'
-                },
-                condition: {
-                    urlFilter: '||default-custom.invalid/custom-default-action-1',
-                    isUrlFilterCaseSensitive: false,
-                    domainType: 'thirdParty'
-                },
-                id: 19
             }]
         })
     })
