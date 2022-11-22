@@ -1579,7 +1579,7 @@ describe('generateTdsRuleset', () => {
             {
                 rule: 'default-block\\.invalid\\/block-ctl-fb-1',
                 action: 'block-ctl-fb',
-                surrogate: 'fb-sdk.js'
+                surrogate: 'supported.js'
             },
             {
                 rule: 'default-block\\.invalid\\/known-action-2',
@@ -1705,12 +1705,16 @@ describe('generateTdsRuleset', () => {
             }, {
                 priority: 10003,
                 action: {
-                    type: 'block'
+                    "redirect": {
+                        "extensionPath": "/supported.js"
+                    },
+                    "type": "redirect"
                 },
                 condition: {
                     urlFilter: '||default-block.invalid/block-ctl-fb-1',
                     isUrlFilterCaseSensitive: false,
-                    domainType: 'thirdParty'
+                    domainType: 'thirdParty',
+                    resourceTypes: ['script']
                 },
                 id: 11
             }, {
