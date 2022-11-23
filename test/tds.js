@@ -1705,10 +1705,10 @@ describe('generateTdsRuleset', () => {
             }, {
                 priority: 10003,
                 action: {
-                    "redirect": {
-                        "extensionPath": "/supported.js"
+                    redirect: {
+                        extensionPath: '/supported.js'
                     },
-                    "type": "redirect"
+                    type: 'redirect'
                 },
                 condition: {
                     urlFilter: '||default-block.invalid/block-ctl-fb-1',
