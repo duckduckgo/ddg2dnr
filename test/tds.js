@@ -155,7 +155,7 @@ async function rulesetEqual (tds, isRegexSupported, startingRuleId, {
     }
 
     if (expectedInverseCustomActionRules) {
-        let actualInverseRules = result.inverseCustomActionRules
+        const actualInverseRules = result.inverseCustomActionRules
 
         assert.deepEqual(actualInverseRules, expectedInverseCustomActionRules)
     }
@@ -1741,31 +1741,31 @@ describe('generateTdsRuleset', () => {
             }],
             expectedInverseCustomActionRules: [
                 {
-                  priority: 10001,
-                  action: { type: 'allow' },
-                  condition: {
-                    urlFilter: '||default-ignore.invalid/block-ctl-yt-2',
-                    isUrlFilterCaseSensitive: false
-                  }
+                    priority: 10001,
+                    action: { type: 'allow' },
+                    condition: {
+                        urlFilter: '||default-ignore.invalid/block-ctl-yt-2',
+                        isUrlFilterCaseSensitive: false
+                    }
                 },
                 {
-                  priority: 10003,
-                  action: { type: 'allow' },
-                  condition: {
-                    urlFilter: '||default-ignore.invalid/block-ctl-fb-1',
-                    isUrlFilterCaseSensitive: false
-                  }
+                    priority: 10003,
+                    action: { type: 'allow' },
+                    condition: {
+                        urlFilter: '||default-ignore.invalid/block-ctl-fb-1',
+                        isUrlFilterCaseSensitive: false
+                    }
                 },
                 {
-                  priority: 10003,
-                  action: { type: 'allow' },
-                  condition: {
-                    urlFilter: '||default-block.invalid/block-ctl-fb-1',
-                    isUrlFilterCaseSensitive: false,
-                    resourceTypes: ['script']
-                  }
+                    priority: 10003,
+                    action: { type: 'allow' },
+                    condition: {
+                        urlFilter: '||default-block.invalid/block-ctl-fb-1',
+                        isUrlFilterCaseSensitive: false,
+                        resourceTypes: ['script']
+                    }
                 }
-              ]
+            ]
         })
     })
 })
