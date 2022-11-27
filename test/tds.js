@@ -81,6 +81,8 @@ function stringifyBlocklist (tds) {
  * @typedef {object} rulesetEqualOptions
  * @property {object[]} [expectedRuleset]
  *   The expected declarativeNetRequest ruleset.
+ * @property {object[]} [expectedInverseCustomActionRules]
+ *   The expected declarativeNetRequest ruleset.
  * @property {object} [expectedLookup]
  *   The expected ruleId -> matchDetails lookup.
  * @property {function} [rulesetTransform]
@@ -112,7 +114,7 @@ function stringifyBlocklist (tds) {
  */
 async function rulesetEqual (tds, isRegexSupported, startingRuleId, {
     expectedRuleset, expectedLookup, rulesetTransform, ruleTransform,
-    lookupTransform
+    lookupTransform, expectedInverseCustomActionRules
 }) {
     const tdsBefore = stringifyBlocklist(tds)
 
@@ -132,6 +134,7 @@ async function rulesetEqual (tds, isRegexSupported, startingRuleId, {
     if (expectedRuleset) {
         /** @type {any} */
         let actualRuleset = result.ruleset
+
         if (rulesetTransform) {
             actualRuleset = rulesetTransform(actualRuleset)
         }
@@ -141,6 +144,7 @@ async function rulesetEqual (tds, isRegexSupported, startingRuleId, {
         }
         assert.deepEqual(actualRuleset, expectedRuleset)
     }
+
     if (expectedLookup) {
         let actualLookup = result.matchDetailsByRuleId
 
@@ -148,6 +152,12 @@ async function rulesetEqual (tds, isRegexSupported, startingRuleId, {
             actualLookup = lookupTransform(actualLookup, result.ruleset)
         }
         assert.deepEqual(actualLookup, expectedLookup)
+    }
+
+    if (expectedInverseCustomActionRules) {
+        let actualInverseRules = result.inverseCustomActionRules
+
+        assert.deepEqual(actualInverseRules, expectedInverseCustomActionRules)
     }
 }
 
@@ -1728,7 +1738,34 @@ describe('generateTdsRuleset', () => {
                     domainType: 'thirdParty'
                 },
                 id: 12
-            }]
+            }],
+            expectedInverseCustomActionRules: [
+                {
+                  priority: 10001,
+                  action: { type: 'allow' },
+                  condition: {
+                    urlFilter: '||default-ignore.invalid/block-ctl-yt-2',
+                    isUrlFilterCaseSensitive: false
+                  }
+                },
+                {
+                  priority: 10003,
+                  action: { type: 'allow' },
+                  condition: {
+                    urlFilter: '||default-ignore.invalid/block-ctl-fb-1',
+                    isUrlFilterCaseSensitive: false
+                  }
+                },
+                {
+                  priority: 10003,
+                  action: { type: 'allow' },
+                  condition: {
+                    urlFilter: '||default-block.invalid/block-ctl-fb-1',
+                    isUrlFilterCaseSensitive: false,
+                    resourceTypes: ['script']
+                  }
+                }
+              ]
         })
     })
 })
