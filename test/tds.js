@@ -1573,11 +1573,11 @@ describe('generateTdsRuleset', () => {
                 action: 'block-ctl-fb'
             },
             {
-                rule: 'default-ignore\\.invalid\\/known-action-3',
+                rule: 'default-ignore\\.invalid\\/known-action-2',
                 exceptions: { types: ['script'] }
             },
             {
-                rule: 'default-ignore\\.invalid\\/block-ctl-yt-2',
+                rule: 'default-ignore\\.invalid\\/block-ctl-yt-1',
                 action: 'block-ctl-yt',
                 exceptions: { types: ['script'] }
             }
@@ -1596,7 +1596,7 @@ describe('generateTdsRuleset', () => {
                 exceptions: { types: ['script'] }
             },
             {
-                rule: 'default-block\\.invalid\\/block-ctl-yt-2',
+                rule: 'default-block\\.invalid\\/block-ctl-yt-1',
                 action: 'block-ctl-yt',
                 exceptions: { types: ['script'] }
             }
@@ -1609,7 +1609,7 @@ describe('generateTdsRuleset', () => {
                     type: 'block'
                 },
                 condition: {
-                    urlFilter: '||default-ignore.invalid/block-ctl-yt-2',
+                    urlFilter: '||default-ignore.invalid/block-ctl-yt-1',
                     isUrlFilterCaseSensitive: false,
                     domainType: 'thirdParty'
                 },
@@ -1620,7 +1620,7 @@ describe('generateTdsRuleset', () => {
                     type: 'allow'
                 },
                 condition: {
-                    urlFilter: '||default-ignore.invalid/block-ctl-yt-2',
+                    urlFilter: '||default-ignore.invalid/block-ctl-yt-1',
                     isUrlFilterCaseSensitive: false,
                     resourceTypes: ['script']
                 },
@@ -1631,7 +1631,7 @@ describe('generateTdsRuleset', () => {
                     type: 'block'
                 },
                 condition: {
-                    urlFilter: '||default-ignore.invalid/known-action-3',
+                    urlFilter: '||default-ignore.invalid/known-action-2',
                     isUrlFilterCaseSensitive: false,
                     domainType: 'thirdParty'
                 },
@@ -1642,7 +1642,7 @@ describe('generateTdsRuleset', () => {
                     type: 'allow'
                 },
                 condition: {
-                    urlFilter: '||default-ignore.invalid/known-action-3',
+                    urlFilter: '||default-ignore.invalid/known-action-2',
                     isUrlFilterCaseSensitive: false,
                     resourceTypes: ['script']
                 },
@@ -1685,7 +1685,7 @@ describe('generateTdsRuleset', () => {
                     type: 'allow'
                 },
                 condition: {
-                    urlFilter: '||default-block.invalid/block-ctl-yt-2',
+                    urlFilter: '||default-block.invalid/block-ctl-yt-1',
                     isUrlFilterCaseSensitive: false,
                     resourceTypes: ['script']
                 },
@@ -1744,7 +1744,7 @@ describe('generateTdsRuleset', () => {
                     priority: 10001,
                     action: { type: 'allow' },
                     condition: {
-                        urlFilter: '||default-ignore.invalid/block-ctl-yt-2',
+                        urlFilter: '||default-ignore.invalid/block-ctl-yt-1',
                         isUrlFilterCaseSensitive: false
                     }
                 },
