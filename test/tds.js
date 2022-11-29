@@ -1747,7 +1747,7 @@ describe('generateTdsRuleset', () => {
                         urlFilter: '||default-ignore.invalid/block-ctl-yt-1',
                         isUrlFilterCaseSensitive: false
                     },
-                    customAction: "block-ctl-yt"
+                    customAction: 'block-ctl-yt'
                 },
                 {
                     priority: 10003,
@@ -1756,7 +1756,7 @@ describe('generateTdsRuleset', () => {
                         urlFilter: '||default-ignore.invalid/block-ctl-fb-1',
                         isUrlFilterCaseSensitive: false
                     },
-                    customAction: "block-ctl-fb"
+                    customAction: 'block-ctl-fb'
                 },
                 {
                     priority: 10003,
@@ -1766,7 +1766,7 @@ describe('generateTdsRuleset', () => {
                         isUrlFilterCaseSensitive: false,
                         resourceTypes: ['script']
                     },
-                    customAction: "block-ctl-fb"
+                    customAction: 'block-ctl-fb'
                 }
             ]
         })
