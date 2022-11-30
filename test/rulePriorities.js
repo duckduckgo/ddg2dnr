@@ -47,6 +47,9 @@ describe('Rule Priorities', () => {
         assert.ok(TRACKER_ALLOWLIST_BASELINE_PRIORITY >
                   TRACKER_BLOCKING_CEILING_PRIORITY)
 
+        assert.ok(TRACKER_ALLOWLIST_BASELINE_PRIORITY <
+                  TRACKING_PARAM_PRIORITY)
+
         // Content Blocking allowlist and ad attribution allowlisting rules
         // should disable Tracker Blocking, but not other protections.
         assert.ok(CONTENT_BLOCKING_ALLOWLIST_PRIORITY >
