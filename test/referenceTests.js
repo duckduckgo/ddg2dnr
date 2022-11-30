@@ -46,15 +46,9 @@ describe('Reference Tests', () => {
             'tracker-radar-tests', 'TR-domain-matching'
         )
 
-        const blockList = JSON.parse(fs.readFileSync(
-            path.join(referenceTestsPath, 'tracker_radar_reference.json'),
-            { encoding: 'utf8', flag: 'r' }
-        ))
+        const blockList = loadJSONFile(referenceTestsPath, 'tracker_radar_reference.json')
 
-        const referenceTests = JSON.parse(fs.readFileSync(
-            path.join(referenceTestsPath, 'domain_matching_tests.json'),
-            { encoding: 'utf8', flag: 'r' }
-        ))
+        const referenceTests = loadJSONFile(referenceTestsPath, 'domain_matching_tests.json')
 
         // Note - This should be taken from surrogates.txt, not hardcoded.
         const supportedSurrogateScripts = new Set(['tracker', 'script.js'])
@@ -114,10 +108,7 @@ describe('Reference Tests', () => {
             { encoding: 'utf8', flag: 'r' }
         ).split('\n')
 
-        const referenceTests = JSON.parse(fs.readFileSync(
-            path.join(referenceTestsPath, 'tests.json'),
-            { encoding: 'utf8', flag: 'r' }
-        ))
+        const referenceTests = loadJSONFile(referenceTestsPath, 'tests.json')
 
         await this.browser.addRules(generateSmarterEncryptionRuleset(domains))
 
