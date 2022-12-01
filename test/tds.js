@@ -81,7 +81,7 @@ function stringifyBlocklist (tds) {
  * @typedef {object} rulesetEqualOptions
  * @property {object[]} [expectedRuleset]
  *   The expected declarativeNetRequest ruleset.
- * @property {object[]} [expectedInverseCustomActionRules]
+ * @property {object} [expectedInverseCustomActionRules]
  *   The expected declarativeNetRequest ruleset.
  * @property {object} [expectedLookup]
  *   The expected ruleId -> matchDetails lookup.
@@ -1601,8 +1601,7 @@ describe('generateTdsRuleset', () => {
                 exceptions: { types: ['script'] }
             }
         ])
-
-        await rulesetEqual(blockList, isRegexSupportedTrue, null, {
+        const expectedRules = {
             expectedRuleset: [{
                 priority: 10001,
                 action: {
@@ -1739,36 +1738,37 @@ describe('generateTdsRuleset', () => {
                 },
                 id: 12
             }],
-            expectedInverseCustomActionRules: [
-                {
-                    priority: 10001,
-                    action: { type: 'allow' },
-                    condition: {
-                        urlFilter: '||default-ignore.invalid/block-ctl-yt-1',
-                        isUrlFilterCaseSensitive: false
-                    },
-                    customAction: 'block-ctl-yt'
-                },
-                {
-                    priority: 10003,
-                    action: { type: 'allow' },
-                    condition: {
-                        urlFilter: '||default-ignore.invalid/block-ctl-fb-1',
-                        isUrlFilterCaseSensitive: false
-                    },
-                    customAction: 'block-ctl-fb'
-                },
-                {
-                    priority: 10003,
-                    action: { type: 'allow' },
-                    condition: {
-                        urlFilter: '||default-block.invalid/block-ctl-fb-1',
-                        isUrlFilterCaseSensitive: false,
-                        resourceTypes: ['script']
-                    },
-                    customAction: 'block-ctl-fb'
+            expectedInverseCustomActionRules: {}
+        }
+        expectedRules.expectedInverseCustomActionRules['block-ctl-yt'] = [
+            {
+                priority: 10001,
+                action: { type: 'allow' },
+                condition: {
+                    urlFilter: '||default-ignore.invalid/block-ctl-yt-1',
+                    isUrlFilterCaseSensitive: false
                 }
-            ]
-        })
+            }
+        ]
+        expectedRules.expectedInverseCustomActionRules['block-ctl-fb'] = [
+            {
+                priority: 10003,
+                action: { type: 'allow' },
+                condition: {
+                    urlFilter: '||default-ignore.invalid/block-ctl-fb-1',
+                    isUrlFilterCaseSensitive: false
+                }
+            },
+            {
+                priority: 10003,
+                action: { type: 'allow' },
+                condition: {
+                    urlFilter: '||default-block.invalid/block-ctl-fb-1',
+                    isUrlFilterCaseSensitive: false,
+                    resourceTypes: ['script']
+                }
+            }
+        ]
+        await rulesetEqual(blockList, isRegexSupportedTrue, null, expectedRules)
     })
 })
