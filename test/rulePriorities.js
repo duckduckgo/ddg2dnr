@@ -47,11 +47,11 @@ describe('Rule Priorities', () => {
         assert.equal(CONTENT_BLOCKING_ALLOWLIST_PRIORITY, 30000)
         assert.equal(GPC_HEADER_PRIORITY, 40000)
         assert.equal(TRACKING_PARAM_PRIORITY, 40000)
+        assert.equal(COOKIE_PRIORITY, 40000)
         assert.equal(SMARTER_ENCRYPTION_PRIORITY, 100000)
         assert.equal(UNPROTECTED_TEMPORARY_ALLOWLIST_PRIORITY, 1000000)
         assert.equal(SERVICE_WORKER_INITIATED_ALLOWING_PRIORITY, 1000000)
         assert.equal(USER_ALLOWLISTED_PRIORITY, 1000000)
-        assert.equal(COOKIE_PRIORITY, 40000)
     })
 
     it('should have the correct relative rule priorities', () => {
