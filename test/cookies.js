@@ -145,4 +145,19 @@ describe('cookie rules', () => {
             assert.deepEqual(exampleRule.condition.excludedInitiatorDomains, ['sub.example.com', 'example.com'])
         })
     })
+
+    describe('matchDetailsByRuleId', function () {
+        it('returns a list of possible domains for a matched rule', async function () {
+            const { ruleset, matchDetailsByRuleId } = generateCookieBlockingRuleset(mockTds, [], [])
+            await this.browser.addRules(ruleset)
+            const matchedRules = await this.browser.testMatchOutcome({
+                url: 'https://tracker.com/pixel',
+                initiator: 'https://www.example.com/',
+                type: 'xmlhttprequest',
+                tabId: 1
+            })
+            assert.equal(matchedRules.length, 1)
+            assert.ok(matchDetailsByRuleId[matchedRules[0].id].possibleTrackerDomains?.includes('tracker.com'))
+        })
+    })
 })
