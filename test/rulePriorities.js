@@ -18,6 +18,10 @@ const {
 } = require('../lib/tds')
 
 const {
+    COOKIE_PRIORITY
+} = require('../lib/cookies')
+
+const {
     BASELINE_PRIORITY: TRACKER_ALLOWLIST_BASELINE_PRIORITY,
     CEILING_PRIORITY: TRACKER_ALLOWLIST_CEILING_PRIORITY
 } = require('../lib/trackerAllowlist')
@@ -47,6 +51,7 @@ describe('Rule Priorities', () => {
         assert.equal(UNPROTECTED_TEMPORARY_ALLOWLIST_PRIORITY, 1000000)
         assert.equal(SERVICE_WORKER_INITIATED_ALLOWING_PRIORITY, 1000000)
         assert.equal(USER_ALLOWLISTED_PRIORITY, 1000000)
+        assert.equal(COOKIE_PRIORITY, 40000)
     })
 
     it('should have the correct relative rule priorities', () => {
@@ -116,5 +121,9 @@ describe('Rule Priorities', () => {
         assert.ok(USER_ALLOWLISTED_PRIORITY > GPC_HEADER_PRIORITY)
         assert.ok(USER_ALLOWLISTED_PRIORITY > TRACKING_PARAM_PRIORITY)
         assert.ok(USER_ALLOWLISTED_PRIORITY > SMARTER_ENCRYPTION_PRIORITY)
+
+        // Cookie blocking should have higher priority than tracker allowlist
+        // rules, so the allowlist rules do not prevent cookie blocking.
+        assert.ok(COOKIE_PRIORITY > TRACKER_ALLOWLIST_CEILING_PRIORITY)
     })
 })

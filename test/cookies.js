@@ -90,11 +90,6 @@ const mockTds = {
 }
 
 describe('cookie rules', () => {
-    it('have higher priority than tracker allowlist rules', () => {
-        assert.ok(COOKIE_PRIORITY > CEILING_PRIORITY)
-        assert.ok(COOKIE_PRIORITY > TDS_CEILING_PRIORITY)
-    })
-
     describe('generateCookieBlockingRuleset', () => {
         it('empty tds generates 0 rules', () => {
             const { ruleset } = generateCookieBlockingRuleset({
