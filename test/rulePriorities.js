@@ -59,9 +59,9 @@ describe('Rule Priorities', () => {
     it('should have the correct relative rule priorities', () => {
         // ATB is higher than allowlist
         assert.ok(ATB_PARAM_PRIORITY > UNPROTECTED_TEMPORARY_ALLOWLIST_PRIORITY)
-        assert.ok(ATB_PARAM_PRIORITY > USER_ALLOWLISTED_PRIORITY) 
-        assert.ok(ATB_PARAM_PRIORITY > SERVICE_WORKER_INITIATED_ALLOWING_PRIORITY) 
-        
+        assert.ok(ATB_PARAM_PRIORITY > USER_ALLOWLISTED_PRIORITY)
+        assert.ok(ATB_PARAM_PRIORITY > SERVICE_WORKER_INITIATED_ALLOWING_PRIORITY)
+
         // Ceiling priorities should always be higher than baseline.
         assert.ok(TRACKER_BLOCKING_BASELINE_PRIORITY < TRACKER_BLOCKING_CEILING_PRIORITY)
         assert.ok(TRACKER_ALLOWLIST_BASELINE_PRIORITY < TRACKER_ALLOWLIST_CEILING_PRIORITY)
@@ -132,6 +132,5 @@ describe('Rule Priorities', () => {
         // Cookie blocking should have higher priority than tracker allowlist
         // rules, so the allowlist rules do not prevent cookie blocking.
         assert.ok(COOKIE_PRIORITY > TRACKER_ALLOWLIST_CEILING_PRIORITY)
-
     })
 })
