@@ -97,49 +97,49 @@ describe('cookie rules', () => {
 
     describe('generateCookieBlockingRuleset', () => {
         it('empty tds generates 0 rules', () => {
-            const rules = generateCookieBlockingRuleset({
+            const { ruleset } = generateCookieBlockingRuleset({
                 trackers: {},
                 entities: {},
                 cnames: {}
             }, [], [])
-            assert.equal(rules.length, 0)
+            assert.equal(ruleset.length, 0)
         })
 
         it('generates a block rule with entity domains included (including CNAMEs)', () => {
-            const rules = generateCookieBlockingRuleset(mockTds, [], [])
-            const trackerRule = rules.find(rule => rule.condition.requestDomains?.includes('track-the-things.com'))
+            const { ruleset } = generateCookieBlockingRuleset(mockTds, [], [])
+            const trackerRule = ruleset.find(rule => rule.condition.requestDomains?.includes('track-the-things.com'))
             assert.ok(!!trackerRule)
             assert.deepEqual(trackerRule.condition.requestDomains, ['track-the-things.com', 'track.example.com', 'track-more.com'])
             assert.deepEqual(trackerRule.condition.excludedInitiatorDomains, ['track-the-things.com', 'track.example.com', 'track-more.com', 'track-homepage.com'])
         })
 
         it('excludedCookieDomains: removes a domain from the rules', () => {
-            const rules = generateCookieBlockingRuleset(mockTds, ['broken.track-more.com'], [])
-            const trackerRule = rules.find(rule => rule.condition.requestDomains?.includes('track-the-things.com'))
+            const { ruleset } = generateCookieBlockingRuleset(mockTds, ['broken.track-more.com'], [])
+            const trackerRule = ruleset.find(rule => rule.condition.requestDomains?.includes('track-the-things.com'))
             assert.ok(!!trackerRule)
             assert.deepEqual(trackerRule.condition.requestDomains, ['track-the-things.com', 'track.example.com', 'track-more.com'])
             assert.deepEqual(trackerRule.condition.excludedInitiatorDomains, ['track-the-things.com', 'track.example.com', 'track-more.com', 'track-homepage.com'])
             assert.deepEqual(trackerRule.condition.excludedRequestDomains, ['broken.track-more.com'])
             // check that this exclusion isn't added to irrelevant rules
-            const otherRule = rules.find(rule => rule.condition.requestDomains?.includes('tracker.com'))
+            const otherRule = ruleset.find(rule => rule.condition.requestDomains?.includes('tracker.com'))
             assert.deepEqual(otherRule?.condition.excludedRequestDomains || [], [])
         })
 
         it('site allowlist domains are added to every rule', () => {
-            const rules = generateCookieBlockingRuleset(mockTds, [], ['safe.site'])
-            assert.ok(rules.every(r => r.condition.excludedInitiatorDomains?.includes('safe.site')))
+            const { ruleset } = generateCookieBlockingRuleset(mockTds, [], ['safe.site'])
+            assert.ok(ruleset.every(r => r.condition.excludedInitiatorDomains?.includes('safe.site')))
         })
 
         it('groups single domain entities', () => {
-            const rules = generateCookieBlockingRuleset(mockTds, [], [])
-            const thirdPartyRules = rules.filter(r => r.condition.domainType === 'thirdParty')
+            const { ruleset } = generateCookieBlockingRuleset(mockTds, [], [])
+            const thirdPartyRules = ruleset.filter(r => r.condition.domainType === 'thirdParty')
             assert.equal(thirdPartyRules.length, 1)
             assert.deepEqual(thirdPartyRules[0].condition.requestDomains, ['tracker.com'])
         })
 
         it('handles not eTLD+1 trackers', () => {
-            const rules = generateCookieBlockingRuleset(mockTds, [], [])
-            const exampleRule = rules.find(r => r.condition.requestDomains?.includes('sub.example.com'))
+            const { ruleset } = generateCookieBlockingRuleset(mockTds, [], [])
+            const exampleRule = ruleset.find(r => r.condition.requestDomains?.includes('sub.example.com'))
             assert.ok(!!exampleRule)
             assert.deepEqual(exampleRule.condition.requestDomains, ['sub.example.com'])
             assert.deepEqual(exampleRule.condition.excludedInitiatorDomains, ['sub.example.com', 'example.com'])

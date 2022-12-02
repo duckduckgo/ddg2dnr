@@ -160,7 +160,7 @@ describe('Reference Tests', () => {
             const siteAllowlist = config.features.trackingCookies3p.exceptions.map(e => e.domain)
             const unprotectedTemporary = config.unprotectedTemporary.map(e => e.domain)
 
-            cookieRules = generateCookieBlockingRuleset(tds, excludedCookieDomains, [...siteAllowlist, ...unprotectedTemporary], 1000)
+            cookieRules = generateCookieBlockingRuleset(tds, excludedCookieDomains, [...siteAllowlist, ...unprotectedTemporary], 1000).ruleset
         })
 
         this.beforeEach(async function () {
