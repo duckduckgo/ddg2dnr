@@ -1,7 +1,5 @@
 const assert = require('assert')
-const { CEILING_PRIORITY } = require('../lib/trackerAllowlist')
-const { CEILING_PRIORITY: TDS_CEILING_PRIORITY } = require('../lib/tds')
-const { COOKIE_PRIORITY, generateCookieBlockingRuleset } = require('../lib/cookies')
+const { generateCookieBlockingRuleset } = require('../lib/cookies.js')
 
 /** @type {import('../lib/utils.js').TDS} */
 const mockTds = {
