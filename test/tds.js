@@ -1575,11 +1575,6 @@ describe('generateTdsRuleset', () => {
             {
                 rule: 'default-ignore\\.invalid\\/known-action-2',
                 exceptions: { types: ['script'] }
-            },
-            {
-                rule: 'default-ignore\\.invalid\\/block-ctl-yt-1',
-                action: 'block-ctl-yt',
-                exceptions: { types: ['script'] }
             }
         ])
         addDomain(blockList, 'default-block.invalid', 'Default Block entity', 'block', [
@@ -1594,11 +1589,6 @@ describe('generateTdsRuleset', () => {
             {
                 rule: 'default-block\\.invalid\\/known-action-2',
                 exceptions: { types: ['script'] }
-            },
-            {
-                rule: 'default-block\\.invalid\\/block-ctl-yt-1',
-                action: 'block-ctl-yt',
-                exceptions: { types: ['script'] }
             }
         ])
         const expectedRules = {
@@ -1608,7 +1598,7 @@ describe('generateTdsRuleset', () => {
                     type: 'block'
                 },
                 condition: {
-                    urlFilter: '||default-ignore.invalid/block-ctl-yt-1',
+                    urlFilter: '||default-ignore.invalid/known-action-2',
                     isUrlFilterCaseSensitive: false,
                     domainType: 'thirdParty'
                 },
@@ -1619,7 +1609,7 @@ describe('generateTdsRuleset', () => {
                     type: 'allow'
                 },
                 condition: {
-                    urlFilter: '||default-ignore.invalid/block-ctl-yt-1',
+                    urlFilter: '||default-ignore.invalid/known-action-2',
                     isUrlFilterCaseSensitive: false,
                     resourceTypes: ['script']
                 },
@@ -1630,35 +1620,13 @@ describe('generateTdsRuleset', () => {
                     type: 'block'
                 },
                 condition: {
-                    urlFilter: '||default-ignore.invalid/known-action-2',
+                    urlFilter: '||default-ignore.invalid/block-ctl-fb-1',
                     isUrlFilterCaseSensitive: false,
                     domainType: 'thirdParty'
                 },
                 id: 3
             }, {
-                priority: 10002,
-                action: {
-                    type: 'allow'
-                },
-                condition: {
-                    urlFilter: '||default-ignore.invalid/known-action-2',
-                    isUrlFilterCaseSensitive: false,
-                    resourceTypes: ['script']
-                },
-                id: 4
-            }, {
                 priority: 10003,
-                action: {
-                    type: 'block'
-                },
-                condition: {
-                    urlFilter: '||default-ignore.invalid/block-ctl-fb-1',
-                    isUrlFilterCaseSensitive: false,
-                    domainType: 'thirdParty'
-                },
-                id: 5
-            }, {
-                priority: 10004,
                 action: {
                     type: 'block'
                 },
@@ -1667,7 +1635,7 @@ describe('generateTdsRuleset', () => {
                     isUrlFilterCaseSensitive: false,
                     domainType: 'thirdParty'
                 },
-                id: 6
+                id: 4
             }, {
                 priority: 10000,
                 action: {
@@ -1677,42 +1645,20 @@ describe('generateTdsRuleset', () => {
                     domainType: 'thirdParty',
                     requestDomains: ['default-block.invalid']
                 },
-                id: 7
+                id: 5
             }, {
                 priority: 10001,
                 action: {
                     type: 'allow'
                 },
                 condition: {
-                    urlFilter: '||default-block.invalid/block-ctl-yt-1',
-                    isUrlFilterCaseSensitive: false,
-                    resourceTypes: ['script']
-                },
-                id: 8
-            }, {
-                priority: 10002,
-                action: {
-                    type: 'block'
-                },
-                condition: {
-                    urlFilter: '||default-block.invalid/known-action-2',
-                    isUrlFilterCaseSensitive: false,
-                    domainType: 'thirdParty'
-                },
-                id: 9
-            }, {
-                priority: 10002,
-                action: {
-                    type: 'allow'
-                },
-                condition: {
                     urlFilter: '||default-block.invalid/known-action-2',
                     isUrlFilterCaseSensitive: false,
                     resourceTypes: ['script']
                 },
-                id: 10
+                id: 6
             }, {
-                priority: 10003,
+                priority: 10002,
                 action: {
                     redirect: {
                         extensionPath: '/supported.js'
@@ -1725,9 +1671,9 @@ describe('generateTdsRuleset', () => {
                     domainType: 'thirdParty',
                     resourceTypes: ['script']
                 },
-                id: 11
+                id: 7
             }, {
-                priority: 10004,
+                priority: 10003,
                 action: {
                     type: 'block'
                 },
@@ -1736,23 +1682,23 @@ describe('generateTdsRuleset', () => {
                     isUrlFilterCaseSensitive: false,
                     domainType: 'thirdParty'
                 },
-                id: 12
+                id: 8
             }],
             expectedInverseCustomActionRules: {}
         }
-        expectedRules.expectedInverseCustomActionRules['block-ctl-yt'] = [
-            {
-                priority: 10001,
-                action: { type: 'allow' },
-                condition: {
-                    urlFilter: '||default-ignore.invalid/block-ctl-yt-1',
-                    isUrlFilterCaseSensitive: false
-                }
-            }
-        ]
+        // expectedRules.expectedInverseCustomActionRules['block-ctl-yt'] = [
+        //     {
+        //         priority: 10001,
+        //         action: { type: 'allow' },
+        //         condition: {
+        //             urlFilter: '||default-ignore.invalid/block-ctl-yt-1',
+        //             isUrlFilterCaseSensitive: false
+        //         }
+        //     }
+        // ]
         expectedRules.expectedInverseCustomActionRules['block-ctl-fb'] = [
             {
-                priority: 10003,
+                priority: 10002,
                 action: { type: 'allow' },
                 condition: {
                     urlFilter: '||default-ignore.invalid/block-ctl-fb-1',
@@ -1760,7 +1706,7 @@ describe('generateTdsRuleset', () => {
                 }
             },
             {
-                priority: 10003,
+                priority: 10002,
                 action: { type: 'allow' },
                 condition: {
                     urlFilter: '||default-block.invalid/block-ctl-fb-1',
