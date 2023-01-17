@@ -73,7 +73,7 @@ describe('Rule Priorities', () => {
 
         // Tracker allowlist should take priority over tracker blocking and smarter encryption, but not
         // other features/allowlists.
-        assert.ok(TRACKER_ALLOWLIST_CEILING_PRIORITY > SMARTER_ENCRYPTION_PRIORITY)
+        assert.ok(TRACKER_ALLOWLIST_BASELINE_PRIORITY > SMARTER_ENCRYPTION_PRIORITY)
         assert.ok(TRACKER_ALLOWLIST_BASELINE_PRIORITY > TRACKER_BLOCKING_CEILING_PRIORITY)
         assert.ok(TRACKER_ALLOWLIST_CEILING_PRIORITY < AD_ATTRIBUTION_POLICY_PRIORITY)
         assert.ok(TRACKER_ALLOWLIST_CEILING_PRIORITY < CONTENT_BLOCKING_ALLOWLIST_PRIORITY)
