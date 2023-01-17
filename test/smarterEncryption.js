@@ -3,7 +3,7 @@ const assert = require('assert')
 const {
     SMARTER_ENCRYPTION_PRIORITY,
     generateSmarterEncryptionRuleset,
-    createSmarterEncryptionExceptionRule
+    createSmarterEncryptionTemporaryRule
 } = require('../lib/smarterEncryption')
 
 describe('generateSmarterEncryptionRuleset', () => {
@@ -280,7 +280,7 @@ describe('generateSmarterEncryptionRuleset', () => {
     it('createSmarterEncryptionExceptionRule should prevent https upgrade for domain', async function () {
         const testDomains = ['privacy-test-pages.glitch.me', 'glitch.me']
         await this.browser.addRules(generateSmarterEncryptionRuleset(testDomains, 2))
-        await this.browser.addRules([createSmarterEncryptionExceptionRule([testDomains[0]], 'allow', 1).rule])
+        await this.browser.addRules([createSmarterEncryptionTemporaryRule([testDomains[0]], 'allow', 1).rule])
         const expectNotUpgraded = await this.browser.testMatchOutcome({
             url: 'http://privacy-test-pages.glitch.me/insecure',
             type: 'main_frame',
