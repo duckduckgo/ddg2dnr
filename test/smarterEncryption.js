@@ -296,4 +296,71 @@ describe('generateSmarterEncryptionRuleset', () => {
         assert.equal(expectUpgraded.length, 1)
         assert.equal(expectUpgraded[0].action.type, 'upgradeScheme')
     })
+
+    it('createSmarterEncryptionExceptionRule should create correct allow rule', function () {
+        const testDomains = ['example.com', 'sub.test.com']
+        assert.deepEqual(createSmarterEncryptionTemporaryRule(testDomains, 'allow', 4).rule, {
+            id: 4,
+            priority: SMARTER_ENCRYPTION_PRIORITY,
+            action: {
+                type: 'allow'
+            },
+            condition: {
+                requestDomains: testDomains,
+                resourceTypes: [
+                    'main_frame',
+                    'sub_frame',
+                    'stylesheet',
+                    'script',
+                    'image',
+                    'font',
+                    'object',
+                    'xmlhttprequest',
+                    'ping',
+                    'csp_report',
+                    'media',
+                    'websocket',
+                    'webtransport',
+                    'webbundle',
+                    'other'
+                ]
+            }
+        })
+    })
+
+    it('createSmarterEncryptionExceptionRule should create correct upgrade rule', function () {
+        const testDomains = ['example.com', 'sub.test.com']
+        assert.deepEqual(createSmarterEncryptionTemporaryRule(testDomains, 'upgrade', 4).rule, {
+            id: 4,
+            priority: SMARTER_ENCRYPTION_PRIORITY,
+            action: {
+                type: 'upgradeScheme'
+            },
+            condition: {
+                requestDomains: testDomains,
+                resourceTypes: [
+                    'main_frame',
+                    'sub_frame',
+                    'stylesheet',
+                    'script',
+                    'image',
+                    'font',
+                    'object',
+                    'xmlhttprequest',
+                    'ping',
+                    'csp_report',
+                    'media',
+                    'websocket',
+                    'webtransport',
+                    'webbundle',
+                    'other'
+                ]
+            }
+        })
+    })
+
+    it('createSmarterEncryptionExceptionRule throws for invalid type', function () {
+        // @ts-ignore
+        assert.throws(() => createSmarterEncryptionTemporaryRule([], 'block'))
+    })
 })
