@@ -27,15 +27,19 @@ npm run smarter-encryption ../list-of-domains-input.txt ../smarter-encryption-ru
 Generate the TDS ruleset:
 
 ```bash
-npm run tds ../tds-input.json ../supported-surrogates-input.json ../tds-ruleset-output.json \
+npm run tds ../tds-input.json analytics.js,ga.js,gpt.js ../tds-ruleset-output.json \
         [../match-details-by-rule-id-output.json]
 ```
 
 Note:
  - This includes both Tracker blocking (see [tds.json][3]) and
    "surrogate script" redirection. (see [tracker-surrogates][4]).
- - supported-surrogates-input.json must be a JSON encoded array of surrogate
-   script names.
+ - The second argument is a comma separated list of supported
+   surrogate scripts. Note that "analytics.js,ga.js,gpt.js" is
+   just an example, see the [tracker-surrogates][4] repository
+   for a full list of available surrogate scripts. If you don't
+   want to support any surrogate scripts, just use a placeholder
+   value e.g. "-".
 
 Generate the extension configuration ruleset:
 

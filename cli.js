@@ -41,14 +41,14 @@ async function main () {
         if (args.length < 3 || args.length > 4) {
             console.error(
                 'Usage: npm run tds',
-                './tds-input.json ./supported-surrogates-input.json ',
+                './tds-input.json analytics.js,ga.js,gpt.js ',
                 './tds-ruleset-output.json ',
                 '[./match-details-by-rule-id-output.json]'
             )
         } else {
             const [
                 tdsFilePath,
-                supportedSurrogatesPath,
+                supportedSurrogates,
                 rulesetFilePath,
                 mappingFilePath
             ] = args
@@ -61,13 +61,7 @@ async function main () {
                       JSON.parse(
                           fs.readFileSync(tdsFilePath, { encoding: 'utf8' })
                       ),
-                      new Set(
-                          JSON.parse(
-                              fs.readFileSync(
-                                  supportedSurrogatesPath, { encoding: 'utf8' }
-                              )
-                          )
-                      ),
+                      new Set(supportedSurrogates.split(',')),
                       '/web_accessible_resources/',
                       isRegexSupported
                   )
