@@ -125,6 +125,8 @@ async function rulesetEqual (tds, isRegexSupported, startingRuleId, {
         )
     }
 
+    console.log(JSON.stringify(result, null, 2))
+
     assert.deepEqual(stringifyBlocklist(tds), tdsBefore, 'TDS mutated!')
     if (expectedRuleset) {
         /** @type {any} */
@@ -952,6 +954,68 @@ describe('generateTdsRuleset', () => {
                         initiatorDomains: [
                             'allowed.invalid'
                         ]
+                    }
+                }
+            ]
+        })
+    })
+
+    it('should handle block rules with options', async () => {
+        const blockList = emptyBlockList()
+        addDomain(blockList, 'block.invalid', 'Example entity', 'ignore', [
+            {
+                rule: 'block\\.invalid\\/domain',
+                options: { domains: ['block-this-domain.invalid'] }
+            },
+            {
+                rule: 'block\\.invalid\\/image',
+                options: { types: ['image'] }
+            }
+        ])
+
+            /*
+            {
+                rule: 'block\\.invalid\\/images',
+                options: { types: ['image'] }
+            }
+            {
+                rule: 'block\\.invalid\\/scripts',
+                exceptions: {
+                    domains: ['block-this-domain.invalid'],
+                    types: ['script']
+                }
+            }
+        ])
+*/
+
+        await rulesetEqual(blockList, isRegexSupportedTrue, null, {
+            expectedRuleset: [
+                {
+                    id: 1,
+                    priority: BASELINE_PRIORITY + TRACKER_RULE_PRIORITY_INCREMENT,
+                    action: {
+                        type: 'block'
+                    },
+                    condition: {
+                        initiatorDomains: [
+                            'block-this-domain.invalid'
+                        ],
+                        domainType: 'thirdParty',
+                        isUrlFilterCaseSensitive: false,
+                        urlFilter: '||block.invalid/domain'
+                    }
+                },
+                {
+                    id: 2,
+                    priority: BASELINE_PRIORITY + (TRACKER_RULE_PRIORITY_INCREMENT * 2),
+                    action: {
+                        type: 'block'
+                    },
+                    condition: {
+                        resourceTypes: ['image'],
+                        domainType: 'thirdParty',
+                        isUrlFilterCaseSensitive: false,
+                        urlFilter: '||block.invalid/image'
                     }
                 }
             ]
