@@ -125,8 +125,6 @@ async function rulesetEqual (tds, isRegexSupported, startingRuleId, {
         )
     }
 
-    console.log(JSON.stringify(result, null, 2))
-
     assert.deepEqual(stringifyBlocklist(tds), tdsBefore, 'TDS mutated!')
     if (expectedRuleset) {
         /** @type {any} */
@@ -964,45 +962,49 @@ describe('generateTdsRuleset', () => {
         const blockList = emptyBlockList()
         addDomain(blockList, 'block.invalid', 'Example entity', 'ignore', [
             {
-                rule: 'block\\.invalid\\/domain',
-                options: { domains: ['block-this-domain.invalid'] }
-            },
-            {
                 rule: 'block\\.invalid\\/image',
                 options: { types: ['image'] }
-            }
-        ])
-
-            /*
-            {
-                rule: 'block\\.invalid\\/images',
-                options: { types: ['image'] }
-            }
+            },
             {
                 rule: 'block\\.invalid\\/scripts',
-                exceptions: {
+                options: {
                     domains: ['block-this-domain.invalid'],
                     types: ['script']
                 }
+            },
+            {
+                rule: 'block\\.invalid\\/with-surrogate',
+                options: {
+                    domains: ['block-this-domain.invalid']
+                },
+                surrogate: 'supported.js'
+            },
+            {
+                rule: 'block\\.invalid\\/with-type-exception',
+                options: {
+                    domains: ['block-this-domain.invalid', 'also-block-this-one.invalid']
+                },
+                exceptions: {
+                    types: ['image']
+                }
             }
-        ])
-*/
+        ].reverse())
 
         await rulesetEqual(blockList, isRegexSupportedTrue, null, {
             expectedRuleset: [
                 {
                     id: 1,
-                    priority: BASELINE_PRIORITY + TRACKER_RULE_PRIORITY_INCREMENT,
+                    priority: BASELINE_PRIORITY + (TRACKER_RULE_PRIORITY_INCREMENT),
                     action: {
                         type: 'block'
                     },
                     condition: {
-                        initiatorDomains: [
-                            'block-this-domain.invalid'
+                        resourceTypes: [
+                            'image'
                         ],
                         domainType: 'thirdParty',
                         isUrlFilterCaseSensitive: false,
-                        urlFilter: '||block.invalid/domain'
+                        urlFilter: '||block.invalid/image'
                     }
                 },
                 {
@@ -1012,10 +1014,52 @@ describe('generateTdsRuleset', () => {
                         type: 'block'
                     },
                     condition: {
-                        resourceTypes: ['image'],
+                        resourceTypes: [
+                            'script'
+                        ],
                         domainType: 'thirdParty',
                         isUrlFilterCaseSensitive: false,
-                        urlFilter: '||block.invalid/image'
+                        initiatorDomains: ['block-this-domain.invalid'],
+                        urlFilter: '||block.invalid/scripts'
+                    }
+                },
+                {
+                    id: 3,
+                    priority: BASELINE_PRIORITY + (TRACKER_RULE_PRIORITY_INCREMENT * 3),
+                    action: {
+                        type: 'redirect',
+                        redirect: { extensionPath: '/supported.js' }
+                    },
+                    condition: {
+                        domainType: 'thirdParty',
+                        isUrlFilterCaseSensitive: false,
+                        initiatorDomains: ['block-this-domain.invalid'],
+                        urlFilter: '||block.invalid/with-surrogate'
+                    }
+                },
+                {
+                    id: 4,
+                    priority: BASELINE_PRIORITY + (TRACKER_RULE_PRIORITY_INCREMENT * 4),
+                    action: {
+                        type: 'block'
+                    },
+                    condition: {
+                        domainType: 'thirdParty',
+                        isUrlFilterCaseSensitive: false,
+                        initiatorDomains: ['block-this-domain.invalid', 'also-block-this-one.invalid'],
+                        urlFilter: '||block.invalid/with-type-exception'
+                    }
+                },
+                {
+                    id: 5,
+                    priority: BASELINE_PRIORITY + (TRACKER_RULE_PRIORITY_INCREMENT * 4),
+                    action: {
+                        type: 'allow'
+                    },
+                    condition: {
+                        isUrlFilterCaseSensitive: false,
+                        resourceTypes: ['image'],
+                        urlFilter: '||block.invalid/with-type-exception'
                     }
                 }
             ]
