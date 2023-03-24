@@ -1,3 +1,7 @@
+# Moved
+
+This repository has moved: https://github.com/duckduckgo/duckduckgo-privacy-extension/tree/main/packages/ddg2dnr
+
 # ddg2dnr
 
 ## Introduction
